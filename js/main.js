@@ -60,3 +60,7 @@ const createDescriptionPhoto = function () {
 };
 
 const descriptionPhotos = Array.from({ length: SIMILAR_PHOTO_COUNT }, createDescriptionPhoto);
+
+descriptionPhotos.forEach((el) => {
+  el.id = 200;
+});
