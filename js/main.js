@@ -1,3 +1,4 @@
-import './create-description-photos';
+import { createDescriptionPhotos } from './create-description-photos';
 
+createDescriptionPhotos();
 

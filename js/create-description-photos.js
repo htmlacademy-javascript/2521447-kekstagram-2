@@ -51,5 +51,5 @@ const createDescriptionPhoto = () => ({
 
 const createDescriptionPhotos = () => Array.from({ length: SIMILAR_PHOTO_COUNT }, createDescriptionPhoto);
 
-createDescriptionPhotos();
+export { createDescriptionPhotos };
 
