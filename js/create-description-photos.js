@@ -32,52 +32,24 @@ const generatePhotoId = createIdGenerator();
 const generateCommentId = createIdGenerator();
 const generateUrlId = createIdGenerator();
 
-const createComment = (id, avatar, message, name) => ({
-  id: id,
-  avatar: avatar,
-  message: message,
-  name: name
+const createComment = () => ({
+  id: generateCommentId(),
+  avatar: `img/avatar-${getRandomNumber(MIN_ID_AVATAR, MAX_ID_AVATAR)}.svg`,
+  message: MESSAGES[getRandomNumber(0, MESSAGES.length - 1)],
+  name: NAMES[getRandomNumber(0, NAMES.length - 1)]
 });
 
-const createComments = (quantityComments, commentId, avatar, message, name) => Array.from((
-  { length: quantityComments },
-  createComment(commentId, avatar, message, name)
-));
+const createComments = () => Array.from({ length: getRandomNumber(MIN_COMMENTS, MAX_COMMENTS) }, createComment);
 
-// const createDescriptionPhoto = (id, url, description, likes) => ({
-//   id: id,
-//   url: url,
-//   description: description,
-//   likes: likes,
-//   comments: createComments(
-//     getRandomNumber(MIN_COMMENTS, MAX_COMMENTS),
-//     generateCommentId,
-//     `img/avatar-${getRandomNumber(MIN_ID_AVATAR, MAX_ID_AVATAR)}.svg`,
-//     MESSAGES[getRandomNumber(0, MESSAGES.length - 1)],
-//     NAMES[getRandomNumber(0, NAMES.length - 1)]
-//   )
-// });
+const createDescriptionPhoto = () => ({
+  id: generatePhotoId(),
+  url: `photos/${generateUrlId()}.jpg`,
+  description: 'Это очень новое фото, пока не добавили описание ))',
+  likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
+  comments: createComments()
+});
 
-// const createDescriptionPhotos = (id, url, description, likes) => Array.from((
-//   { length: getRandomNumber(MIN_COMMENTS, MAX_COMMENTS) },
-//   createDescriptionPhoto(id, url, description, likes)
-// ));
+const createDescriptionPhotos = () => Array.from({ length: SIMILAR_PHOTO_COUNT }, createDescriptionPhoto);
 
-const obj = {
-  test: 0,
-  comments: createComments(
-    getRandomNumber(MIN_COMMENTS, MAX_COMMENTS),
-    generateCommentId,
-    `img/avatar-${getRandomNumber(MIN_ID_AVATAR, MAX_ID_AVATAR)}.svg`,
-    MESSAGES[getRandomNumber(0, MESSAGES.length - 1)],
-    NAMES[getRandomNumber(0, NAMES.length - 1)]
-  )
-};
-
-
-console.log(obj);
-
-// export {
-//   createDescriptionPhotos
-// };
+createDescriptionPhotos();
 
