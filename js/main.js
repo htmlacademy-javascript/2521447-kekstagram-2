@@ -38,36 +38,24 @@ const generatePhotoId = createIdGenerator();
 const generateCommentId = createIdGenerator();
 const generateUrlId = createIdGenerator();
 
-const createComments = () => {
-  const comments = [];
-  const numberOfComments = getRandomNumber(MIN_COMMENTS, MAX_COMMENTS);
-
-  for (let i = 0; i <= numberOfComments; i++) {
-    comments.push(
-      {
-        id: generateCommentId(),
-        avatar: `img/avatar-${getRandomNumber(MIN_ID_AVATAR, MAX_ID_AVATAR)}.svg`,
-        message: MESSAGES[getRandomNumber(0, MESSAGES.length - 1)],
-        name: NAMES[getRandomNumber(0, NAMES.length - 1)]
-      }
-    );
-  }
-
-  return comments;
-};
-
-const createDescriptionPhoto = function () {
-  return {
-    id: generatePhotoId(),
-    url: `photos/${generateUrlId()}.jpg`,
-    description: 'Это очень новое фото, пока не добавили описание ))',
-    likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
-    comments: createComments(),
-  };
-};
-
-const descriptionPhotos = Array.from({ length: SIMILAR_PHOTO_COUNT }, createDescriptionPhoto);
-
-descriptionPhotos.forEach((el) => {
-  JSON.stringify(el);
+const createComment = () => ({
+  id: generateCommentId(),
+  avatar: `img/avatar-${getRandomNumber(MIN_ID_AVATAR, MAX_ID_AVATAR)}.svg`,
+  message: MESSAGES[getRandomNumber(0, MESSAGES.length - 1)],
+  name: NAMES[getRandomNumber(0, NAMES.length - 1)]
 });
+
+const createComments = () => Array.from({ length: getRandomNumber(MIN_COMMENTS, MAX_COMMENTS) }, createComment);
+
+const createDescriptionPhoto = () => ({
+  id: generatePhotoId(),
+  url: `photos/${generateUrlId()}.jpg`,
+  description: 'Это очень новое фото, пока не добавили описание ))',
+  likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
+  comments: createComments()
+});
+
+const createDescriptionPhotos = () => Array.from({ length: SIMILAR_PHOTO_COUNT }, createDescriptionPhoto);
+
+createDescriptionPhotos();
+
