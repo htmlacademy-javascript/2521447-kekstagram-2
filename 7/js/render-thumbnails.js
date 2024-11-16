@@ -1,4 +1,4 @@
-import { createThumbnails } from './create-thumbnails';
+import { createThumbnails } from './create-thumbnails.js';
 
 const pictureTemplate = document.querySelector('#picture')
   .content
