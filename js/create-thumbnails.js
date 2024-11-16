@@ -30,7 +30,7 @@ const createDescriptionPhoto = () => ({
   comments: createComments()
 });
 
-const createDescriptionPhotos = () => Array.from({ length: SIMILAR_PHOTO_COUNT }, createDescriptionPhoto);
+const createThumbnails = () => Array.from({ length: SIMILAR_PHOTO_COUNT }, createDescriptionPhoto);
 
-export { createDescriptionPhotos };
+export { createThumbnails };
 

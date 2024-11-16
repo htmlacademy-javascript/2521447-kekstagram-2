@@ -1,3 +1,5 @@
+import { createThumbnails } from './create-thumbnails';
+
 const pictureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
@@ -21,7 +23,7 @@ const createTemplatePhoto = ({
   return photoTemplate;
 };
 
-const renderDescriptionPhotos = (photos) => {
+const renderThumbnails = (photos) => {
   const pictures = document.querySelector('.pictures');
   const fragment = document.createDocumentFragment();
 
@@ -32,5 +34,5 @@ const renderDescriptionPhotos = (photos) => {
   return pictures.append(fragment);
 };
 
-export { renderDescriptionPhotos };
+renderThumbnails(createThumbnails());
 
