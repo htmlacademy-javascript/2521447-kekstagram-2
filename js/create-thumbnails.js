@@ -1,5 +1,5 @@
-import { createIdGenerator, getRandomNumber } from './utils';
-import { NAMES, MESSAGES } from './data';
+import { createIdGenerator, getRandomNumber } from './utils.js';
+import { NAMES, MESSAGES } from './data.js';
 
 const MIN_COMMENTS = 0;
 const MAX_COMMENTS = 30;
