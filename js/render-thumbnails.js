@@ -1,38 +1,36 @@
-import { createThumbnails } from './create-thumbnails.js';
+import { photos } from './photos.js';
 
-const pictureTemplate = document.querySelector('#picture')
-  .content
-  .querySelector('.picture');
-
-const createTemplatePhoto = ({
+const createTemplateThumbnail = ({
   url,
   description,
   likes,
   comments,
+  id,
 }) => {
-  const photoTemplate = pictureTemplate.cloneNode(true);
-  const photoImg = photoTemplate.querySelector('.picture__img');
+  const thumbnailTemplateElement = document.querySelector('#picture')
+    .content
+    .querySelector('.picture');
+  const thumbnailTemplate = thumbnailTemplateElement.cloneNode(true);
+  const thumbnailImg = thumbnailTemplate.querySelector('.picture__img');
 
-  photoImg.src = url;
-  photoImg.alt = description;
-  photoTemplate.querySelector('.picture__likes')
-    .textContent = likes;
-  photoTemplate.querySelector('.picture__comments')
-    .textContent = comments.length;
+  thumbnailTemplate.setAttribute('data-thumbnail-id', id);
+  thumbnailImg.src = url;
+  thumbnailImg.alt = description;
+  thumbnailTemplate.querySelector('.picture__likes').textContent = likes;
+  thumbnailTemplate.querySelector('.picture__comments').textContent = comments.length;
 
-  return photoTemplate;
+  return thumbnailTemplate;
 };
 
-const renderThumbnails = (photos) => {
+const renderThumbnails = (listPhotos) => {
   const pictures = document.querySelector('.pictures');
   const fragment = document.createDocumentFragment();
 
-  photos.map((photo) => {
-    fragment.append(createTemplatePhoto(photo));
-  });
+  listPhotos.sort(() => Math.random() - 0.5)
+    .map((photo) => fragment.append(createTemplateThumbnail(photo)));
 
   return pictures.append(fragment);
 };
 
-renderThumbnails(createThumbnails());
+renderThumbnails(photos);
 
