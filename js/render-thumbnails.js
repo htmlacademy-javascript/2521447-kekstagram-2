@@ -27,7 +27,7 @@ const renderThumbnails = (listPhotos) => {
   const pictures = document.querySelector('.pictures');
   const fragment = document.createDocumentFragment();
 
-  listPhotos.map((photo) => fragment.append(createTemplateThumbnail(photo)));
+  listPhotos.forEach((photo) => fragment.append(createTemplateThumbnail(photo)));
 
   pictures.addEventListener('click', (evt) => {
     if (evt.target.classList.contains('picture__img')) {
