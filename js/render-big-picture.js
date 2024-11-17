@@ -69,7 +69,7 @@ const renderBigPicture = (photo) => {
   const socialComments = bigPicture.querySelector('.social__comments');
 
   showBigPicture();
-  socialComments.append(createBigPicture(...photo));
+  socialComments.append(createBigPicture(photo));
 };
 
 export { renderBigPicture };
