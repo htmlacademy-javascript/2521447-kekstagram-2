@@ -31,8 +31,9 @@ const renderThumbnails = (listPhotos) => {
 
   pictures.addEventListener('click', (evt) => {
     if (evt.target.classList.contains('picture__img')) {
+      evt.preventDefault();
       const id = evt.target.closest('.picture');
-      const photo = photos.filter((photoElement) => photoElement.id === Number(id.dataset.thumbnailId));
+      const photo = photos.find((photoElement) => photoElement.id === Number(id.dataset.thumbnailId));
 
       renderBigPicture(photo);
     }
