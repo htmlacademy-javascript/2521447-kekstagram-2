@@ -7,7 +7,12 @@ const createIdGenerator = () => {
   return () => ++lastId;
 };
 
+const isEsc = (key) => key === 27;
+const isEnter = (key) => key === 13;
+
 export {
   getRandomNumber,
-  createIdGenerator
+  createIdGenerator,
+  isEsc,
+  isEnter,
 };
