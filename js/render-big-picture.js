@@ -1,12 +1,8 @@
 import { isEsc } from './utils.js';
 import { photos } from './photos.js';
 
-let count = 5;
-
 const bigPicture = document.querySelector('.big-picture');
 const pictureImgButtons = document.querySelectorAll('.picture__img');
-const commentsLoaderButton = bigPicture.querySelector('.social__comments-loader');
-const socialComments = bigPicture.querySelector('.social__comments');
 
 
 const openBigPicture = () => {
@@ -54,63 +50,28 @@ const createTemplateComment = ({ id, avatar, message, name }) => {
   return templateComment;
 };
 
-const load = (comments) => {
+const createBigPicture = ({ url, description, likes, comments }) => {
   const fragment = document.createDocumentFragment();
-  const socialCommentShownCount = bigPicture.querySelector('.social__comment-shown-count');
-
-  if (comments.length <= 5) {
-    comments.forEach((comment) => fragment.append(createTemplateComment(comment)));
-    socialCommentShownCount.textContent = comments.length;
-    commentsLoaderButton.classList.add('hidden');
-  } else {
-    socialCommentShownCount.textContent = count;
-
-    for (let i = 0; i < count; i++) {
-
-      if (i < comments.length) {
-        fragment.append(createTemplateComment(comments[i]));
-      }
-
-      if (comments.length <= count) {
-        socialCommentShownCount.textContent = comments.length;
-        commentsLoaderButton.classList.add('hidden');
-      }
-    }
-  }
-
-  socialComments.append(fragment);
-};
-
-commentsLoaderButton.addEventListener('click', (evt) => {
-  const id = Number(evt.target.closest('.big-picture').dataset.socialId);
-  const photo = photos.find((photoElement) => photoElement.id === id);
-
-  socialComments.textContent = '';
-  count += 5;
-  load(photo.comments);
-});
-
-const createBigPicture = ({ url, description, likes, comments, id }) => {
   const bigPictureImg = bigPicture.querySelector('img');
-
-  bigPicture.closest('.big-picture').dataset.socialId = id;
-
 
   bigPicture.querySelector('.likes-count').textContent = likes;
   bigPicture.querySelector('.social__comment-total-count').textContent = comments.length;
   bigPicture.querySelector('.social__caption').textContent = description;
   bigPictureImg.src = url;
   bigPictureImg.alt = description;
-  load(comments);
+
+  comments.map((comment) => fragment.append(createTemplateComment(comment)));
+
+  return fragment;
 };
 
 const renderBigPicture = (photo) => {
-  count = 5;
-  commentsLoaderButton.classList.remove('hidden');
   bigPicture.querySelector('.social__comments').textContent = '';
 
+  const socialComments = bigPicture.querySelector('.social__comments');
+
   openBigPicture();
-  createBigPicture(photo);
+  socialComments.append(createBigPicture(photo));
 };
 
 pictureImgButtons.forEach((imgButton) => {
