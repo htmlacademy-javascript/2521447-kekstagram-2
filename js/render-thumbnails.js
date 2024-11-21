@@ -1,5 +1,4 @@
 import { photos } from './photos.js';
-import { renderBigPicture } from './render-big-picture.js';
 
 const createTemplateThumbnail = ({
   url,
@@ -29,17 +28,7 @@ const renderThumbnails = (listPhotos) => {
 
   listPhotos.forEach((photo) => fragment.append(createTemplateThumbnail(photo)));
 
-  pictures.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('picture__img')) {
-      evt.preventDefault();
-      const id = evt.target.closest('.picture');
-      const photo = photos.find((photoElement) => photoElement.id === Number(id.dataset.thumbnailId));
-
-      renderBigPicture(photo);
-    }
-  });
-
-  return pictures.append(fragment);
+  pictures.append(fragment);
 };
 
 renderThumbnails(photos);
