@@ -1,8 +1,8 @@
 import { isEsc } from './utils.js';
 import '../vendor/pristine/pristine.min.js';
 
-// temporarily
-import { getRandomNumber } from './utils.js';
+const MAX_HASHTAGS = 5;
+const MAX_SIMBOLS = 20;
 
 const imgUploadForm = document.querySelector('.img-upload__form');
 const imgUploadOverlay = imgUploadForm.querySelector('.img-upload__overlay');
@@ -11,6 +11,10 @@ const effectsPreview = document.querySelectorAll('.effects__preview');
 const textHashtag = imgUploadOverlay.querySelector('.text__hashtags');
 const textDescription = imgUploadOverlay.querySelector('.text__description');
 
+const re = /^#[a-zа-яё0-9]{1,19}$/i;
+
+let errorHashtagMessageTemplate = '';
+
 const closeUploadForm = () => {
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
@@ -18,15 +22,22 @@ const closeUploadForm = () => {
   imgUploadInput.value = '';
 };
 
+
 imgUploadForm.querySelector('.img-upload__cancel')
   .addEventListener('click', () => {
     closeUploadForm();
   });
 
+
 function onDocumentKeydown(evt) {
   if (isEsc(evt.keyCode)) {
-    evt.preventDefault();
-    closeUploadForm();
+    if (!document.activeElement === textHashtag) {
+
+      evt.preventDefault();
+      closeUploadForm();
+    }
+    console.log(document.activeElement === textHashtag);
+
   }
 }
 
@@ -52,43 +63,66 @@ const pristine = new Pristine(imgUploadForm, {
   errorTextClass: 'img-upload__field-wrapper--error',
 });
 
-const validateTextDescription = (value) => value.length <= 140;
-pristine.addValidator(textDescription, validateTextDescription, 'Максимум 140 символов');
-
-/**
- *  - хэштег начинается с символа # (решётка);
-    - строка после решётки должна состоять из букв и чисел и не может содержать пробелы,
-        спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т.п.), эмодзи и т.д.;
-    - хеш-тег не может состоять только из одной решётки;
-    - максимальная длина одного хэштега 20 символов, включая решётку;
-    - хэштеги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом;
-    - хэштеги разделяются пробелами;
-    - один и тот же хэштег не может быть использован дважды;
-    - нельзя указать больше пяти хэштегов;
- */
-const textErrors = [
-  'Хэштег должен начинаться с # (решётка)',
-  'Максимальная длина одного хэштега 20 символов',
-  'один и тот же хэштег не может быть использован дважды',
-  'нельзя указать больше пяти хэштегов',
-  'хэштеги разделяются пробелами'
-];
-
 const validateHashtag = (value) => {
-  let isValid = false;
-  let str = value;
+  errorHashtagMessageTemplate = '';
 
-  return isValid;
-};
-const getHashtagErrorMessage = () => {
-  const i = 0;
-  return textErrors[i];
+  const inputText = value.toLowerCase().trim();
+
+  if (inputText.length === 0) {
+    return true;
+  }
+
+  const inputArray = inputText.split(/\s+/);
+
+  const rules = [
+    {
+      check: inputArray.some((item) => item === '#'),
+      error: 'Хэштег не может состоять только из одной # (решетки)',
+    },
+    {
+      check: inputArray.some((item) => item.slice(1).includes('#')),
+      error: 'Хэштег разделяются пробелами',
+    },
+    {
+      check: inputArray.some((item) => item[0] !== '#'),
+      error: 'Хэштег должен начинаться с # (решетки)',
+    },
+    {
+      check: inputArray.some((item, i, arr) => arr.includes(item, i + 1)),
+      error: 'Хэштег не должны повторяться',
+    },
+    {
+      check: inputArray.some((item) => item.length > MAX_SIMBOLS),
+      error: `Максимальная длина одного хэштега ${MAX_SIMBOLS} включая # (решктку)`,
+    },
+    {
+      check: inputArray.length > MAX_HASHTAGS,
+      error: `Нельзя указать больше ${MAX_HASHTAGS} хэштегов`,
+    },
+    {
+      check: inputArray.some((item) => !re.test(item)),
+      error: 'Хэштег содержит недопустимые символы',
+    },
+  ];
+
+  return rules.every((rule) => {
+    const isInvalid = rule.check;
+
+    if (isInvalid) {
+      errorHashtagMessageTemplate += rule.error;
+    }
+    return !isInvalid;
+  });
 };
 
-pristine.addValidator(textHashtag, validateHashtag, getHashtagErrorMessage);
+const validateHashtagMessage = () => errorHashtagMessageTemplate;
+
+const validateTextDescription = (value) => value.length <= 140;
+
+pristine.addValidator(textDescription, validateTextDescription, 'Максимум 140 символов');
+pristine.addValidator(textHashtag, validateHashtag, validateHashtagMessage);
 
 imgUploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  const isValid = pristine.validate();
-  console.log(isValid);
+  pristine.validate();
 });
