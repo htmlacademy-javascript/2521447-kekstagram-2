@@ -15,10 +15,18 @@ const re = /^#[a-zа-яё0-9]{1,19}$/i;
 
 let errorHashtagMessageTemplate = '';
 
+const openUploadForm = () => {
+  document.body.classList.add('modal-open');
+  imgUploadOverlay.classList.remove('hidden');
+  document.addEventListener('keydown', onDocumentKeydown);
+  document.addEventListener('click', onDocumentClick);
+};
+
 const closeUploadForm = () => {
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
+  document.removeEventListener('click', onDocumentClick);
   imgUploadInput.value = '';
 };
 
@@ -31,20 +39,23 @@ imgUploadForm.querySelector('.img-upload__cancel')
 
 function onDocumentKeydown(evt) {
   if (isEsc(evt.keyCode)) {
-    if (!document.activeElement === textHashtag) {
-
+    if (document.activeElement !== textHashtag && document.activeElement !== textDescription) {
       evt.preventDefault();
       closeUploadForm();
     }
-    console.log(document.activeElement === textHashtag);
+  }
+}
 
+function onDocumentClick(evt) {
+  if (evt.target.className === 'img-upload__overlay') {
+    closeUploadForm();
   }
 }
 
 imgUploadInput.addEventListener('change', (evt) => {
-  document.addEventListener('keydown', onDocumentKeydown);
   const file = evt.target.files[0];
   const reader = new FileReader();
+
   reader.addEventListener('load', (e) => {
     const img = document.querySelector('.img-upload__preview');
     img.querySelector('img').src = e.target.result;
@@ -52,9 +63,9 @@ imgUploadInput.addEventListener('change', (evt) => {
       imgEffect.style.backgroundImage = `url(${e.target.result})`;
     });
   });
+
   reader.readAsDataURL(file);
-  document.body.classList.add('modal-open');
-  imgUploadOverlay.classList.remove('hidden');
+  openUploadForm();
 });
 
 const pristine = new Pristine(imgUploadForm, {
