@@ -1,5 +1,6 @@
 import { isEsc } from './utils.js';
 import { changeImageScale } from './change-image-scale.js';
+import { createFilters } from './create-filters.js';
 import '../vendor/pristine/pristine.min.js';
 
 const MAX_HASHTAGS = 5;
@@ -22,6 +23,7 @@ const openUploadForm = () => {
   document.addEventListener('keydown', onDocumentKeydown);
   document.addEventListener('click', onDocumentClick);
   changeImageScale();
+  createFilters();
 };
 
 const closeUploadForm = () => {
