@@ -1,6 +1,7 @@
 import { isEsc } from './utils.js';
 import { photos } from './photos.js';
 
+const COUNT_SHOW_STEP = 5;
 let startCommentsCount = 5;
 
 const bigPicture = document.querySelector('.big-picture');
@@ -58,7 +59,7 @@ const renderComments = (comments) => {
   const fragment = document.createDocumentFragment();
   const socialCommentShownCount = bigPicture.querySelector('.social__comment-shown-count');
 
-  if (comments.length <= 5) {
+  if (comments.length <= startCommentsCount) {
     comments.forEach((comment) => fragment.append(createTemplateComment(comment)));
     socialCommentShownCount.textContent = comments.length;
     commentsLoaderButton.classList.add('hidden');
@@ -86,7 +87,7 @@ commentsLoaderButton.addEventListener('click', (evt) => {
   const photo = photos.find((photoElement) => photoElement.id === id);
 
   socialComments.textContent = '';
-  startCommentsCount += 5;
+  startCommentsCount += COUNT_SHOW_STEP;
   renderComments(photo.comments);
 });
 
@@ -105,7 +106,7 @@ const createBigPicture = ({ url, description, likes, comments, id }) => {
 };
 
 const renderBigPicture = (photo) => {
-  startCommentsCount = 5;
+  startCommentsCount = COUNT_SHOW_STEP;
   commentsLoaderButton.classList.remove('hidden');
   bigPicture.querySelector('.social__comments').textContent = '';
 
