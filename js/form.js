@@ -11,8 +11,6 @@ const effectsPreview = document.querySelectorAll('.effects__preview');
 const textHashtag = imgUploadOverlay.querySelector('.text__hashtags');
 const textDescription = imgUploadOverlay.querySelector('.text__description');
 
-const re = /^#[a-zа-яё0-9]{1,19}$/i;
-
 let errorHashtagMessageTemplate = '';
 
 const openUploadForm = () => {
@@ -76,6 +74,7 @@ const pristine = new Pristine(imgUploadForm, {
 
 const validateHashtag = (value) => {
   errorHashtagMessageTemplate = '';
+  const re = /^#[a-zа-яё0-9]{1,19}$/i;
 
   const inputText = value.toLowerCase().trim();
 
@@ -126,12 +125,10 @@ const validateHashtag = (value) => {
   });
 };
 
-const validateHashtagMessage = () => errorHashtagMessageTemplate;
-
 const validateTextDescription = (value) => value.length <= 140;
 
 pristine.addValidator(textDescription, validateTextDescription, 'Максимум 140 символов');
-pristine.addValidator(textHashtag, validateHashtag, validateHashtagMessage);
+pristine.addValidator(textHashtag, validateHashtag, () => errorHashtagMessageTemplate);
 
 imgUploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
