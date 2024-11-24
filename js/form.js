@@ -1,4 +1,5 @@
 import { isEsc } from './utils.js';
+import { changeImageScale } from './change-image-scale.js';
 import '../vendor/pristine/pristine.min.js';
 
 const MAX_HASHTAGS = 5;
@@ -20,6 +21,7 @@ const openUploadForm = () => {
   imgUploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onDocumentKeydown);
   document.addEventListener('click', onDocumentClick);
+  changeImageScale();
 };
 
 const closeUploadForm = () => {
