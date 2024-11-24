@@ -11,8 +11,6 @@ const effectsPreview = document.querySelectorAll('.effects__preview');
 const textHashtag = imgUploadOverlay.querySelector('.text__hashtags');
 const textDescription = imgUploadOverlay.querySelector('.text__description');
 
-const re = /^#[a-zа-яё0-9]{1,19}$/i;
-
 let errorHashtagMessageTemplate = '';
 
 const openUploadForm = () => {
@@ -76,6 +74,7 @@ const pristine = new Pristine(imgUploadForm, {
 
 const validateHashtag = (value) => {
   errorHashtagMessageTemplate = '';
+  const re = /^#[a-zа-яё0-9]{1,19}$/i;
 
   const inputText = value.toLowerCase().trim();
 
