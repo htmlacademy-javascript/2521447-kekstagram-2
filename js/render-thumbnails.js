@@ -1,5 +1,3 @@
-import { photos } from './photos.js';
-
 const createTemplateThumbnail = ({
   url,
   description,
@@ -31,5 +29,7 @@ const renderThumbnails = (listPhotos) => {
   pictures.append(fragment);
 };
 
-renderThumbnails(photos);
-
+fetch('https://31.javascript.htmlacademy.pro/kekstagram/data')
+  .then((response) => response.json())
+  .then((photos) => photos.slice(0, 19))
+  .then((photos) => renderThumbnails(photos));
