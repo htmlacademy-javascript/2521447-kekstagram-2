@@ -13,9 +13,13 @@ const effectsPreview = document.querySelectorAll('.effects__preview');
 const textHashtag = imgUploadOverlay.querySelector('.text__hashtags');
 const textDescription = imgUploadOverlay.querySelector('.text__description');
 
-const re = /^#[a-zа-яё0-9]{1,19}$/i;
-
 let errorHashtagMessageTemplate = '';
+
+const pristine = new Pristine(imgUploadForm, {
+  classTo: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextClass: 'img-upload__field-wrapper--error',
+});
 
 const openUploadForm = () => {
   document.body.classList.add('modal-open');
@@ -29,11 +33,12 @@ const openUploadForm = () => {
 const closeUploadForm = () => {
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onDocumentKeydown);
-  document.removeEventListener('click', onDocumentClick);
   imgUploadInput.value = '';
+  textHashtag.value = '';
+  textDescription.value = '';
+  pristine.reset();
+  document.removeEventListener('keydown', onDocumentKeydown);
 };
-
 
 imgUploadForm.querySelector('.img-upload__cancel')
   .addEventListener('click', () => {
@@ -47,12 +52,6 @@ function onDocumentKeydown(evt) {
       evt.preventDefault();
       closeUploadForm();
     }
-  }
-}
-
-function onDocumentClick(evt) {
-  if (evt.target.className === 'img-upload__overlay') {
-    closeUploadForm();
   }
 }
 
@@ -72,14 +71,10 @@ imgUploadInput.addEventListener('change', (evt) => {
   openUploadForm();
 });
 
-const pristine = new Pristine(imgUploadForm, {
-  classTo: 'img-upload__field-wrapper',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextClass: 'img-upload__field-wrapper--error',
-});
 
 const validateHashtag = (value) => {
   errorHashtagMessageTemplate = '';
+  const re = /^#[a-zа-яё0-9]{1,19}$/i;
 
   const inputText = value.toLowerCase().trim();
 
@@ -130,12 +125,10 @@ const validateHashtag = (value) => {
   });
 };
 
-const validateHashtagMessage = () => errorHashtagMessageTemplate;
-
 const validateTextDescription = (value) => value.length <= 140;
 
 pristine.addValidator(textDescription, validateTextDescription, 'Максимум 140 символов');
-pristine.addValidator(textHashtag, validateHashtag, validateHashtagMessage);
+pristine.addValidator(textHashtag, validateHashtag, () => errorHashtagMessageTemplate);
 
 imgUploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
