@@ -13,21 +13,27 @@ const textDescription = imgUploadOverlay.querySelector('.text__description');
 
 let errorHashtagMessageTemplate = '';
 
+const pristine = new Pristine(imgUploadForm, {
+  classTo: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextClass: 'img-upload__field-wrapper--error',
+});
+
 const openUploadForm = () => {
   document.body.classList.add('modal-open');
   imgUploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onDocumentKeydown);
-  document.addEventListener('click', onDocumentClick);
 };
 
 const closeUploadForm = () => {
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onDocumentKeydown);
-  document.removeEventListener('click', onDocumentClick);
   imgUploadInput.value = '';
+  textHashtag.value = '';
+  textDescription.value = '';
+  pristine.reset();
+  document.removeEventListener('keydown', onDocumentKeydown);
 };
-
 
 imgUploadForm.querySelector('.img-upload__cancel')
   .addEventListener('click', () => {
@@ -41,12 +47,6 @@ function onDocumentKeydown(evt) {
       evt.preventDefault();
       closeUploadForm();
     }
-  }
-}
-
-function onDocumentClick(evt) {
-  if (evt.target.className === 'img-upload__overlay') {
-    closeUploadForm();
   }
 }
 
@@ -66,11 +66,6 @@ imgUploadInput.addEventListener('change', (evt) => {
   openUploadForm();
 });
 
-const pristine = new Pristine(imgUploadForm, {
-  classTo: 'img-upload__field-wrapper',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextClass: 'img-upload__field-wrapper--error',
-});
 
 const validateHashtag = (value) => {
   errorHashtagMessageTemplate = '';
@@ -125,12 +120,10 @@ const validateHashtag = (value) => {
   });
 };
 
-const validateHashtagMessage = () => errorHashtagMessageTemplate;
-
 const validateTextDescription = (value) => value.length <= 140;
 
 pristine.addValidator(textDescription, validateTextDescription, 'Максимум 140 символов');
-pristine.addValidator(textHashtag, validateHashtag, validateHashtagMessage);
+pristine.addValidator(textHashtag, validateHashtag, () => errorHashtagMessageTemplate);
 
 imgUploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
