@@ -1,10 +1,15 @@
-import { isEsc } from './utils.js';
-import { changeImageScale } from './change-image-scale.js';
-import { createFilters } from './create-filters.js';
 import '../vendor/pristine/pristine.min.js';
+import { isEsc } from './utils.js';
+import { createFilters } from './create-filters.js';
 
 const MAX_HASHTAGS = 5;
 const MAX_SIMBOLS = 20;
+
+const Zoom = {
+  MIN: 25,
+  MAX: 100,
+  STEP: 25,
+};
 
 const imgUploadForm = document.querySelector('.img-upload__form');
 const imgUploadOverlay = imgUploadForm.querySelector('.img-upload__overlay');
@@ -12,6 +17,29 @@ const imgUploadInput = imgUploadForm.querySelector('.img-upload__input');
 const effectsPreview = document.querySelectorAll('.effects__preview');
 const textHashtag = imgUploadOverlay.querySelector('.text__hashtags');
 const textDescription = imgUploadOverlay.querySelector('.text__description');
+const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+const scaleControlBigger = document.querySelector('.scale__control--bigger');
+const scaleControlValue = document.querySelector('.scale__control--value');
+const imgUploadPreview = document.querySelector('.img-upload__preview');
+const imgUpload = imgUploadPreview.querySelector('img');
+
+const changeImageScale = (factor = 1) => {
+  let size = parseInt(scaleControlValue.value, 10) + (Zoom.STEP * factor);
+
+  if (size < Zoom.MIN) {
+    size = Zoom.MIN;
+  }
+
+  if (size > Zoom.MAX) {
+    size = Zoom.MAX;
+  }
+
+  scaleControlValue.value = `${size}%`;
+  imgUpload.style.transform = `scale(${size / 100})`;
+};
+
+scaleControlSmaller.addEventListener('click', () => changeImageScale(-1));
+scaleControlBigger.addEventListener('click', () => changeImageScale());
 
 let errorHashtagMessageTemplate = '';
 
@@ -25,8 +53,6 @@ const openUploadForm = () => {
   document.body.classList.add('modal-open');
   imgUploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onDocumentKeydown);
-  document.addEventListener('click', onDocumentClick);
-  changeImageScale();
   createFilters();
 };
 
@@ -38,13 +64,14 @@ const closeUploadForm = () => {
   textDescription.value = '';
   pristine.reset();
   document.removeEventListener('keydown', onDocumentKeydown);
+  imgUpload.style.transform = 'scale(1)';
+  scaleControlValue.value = '100%';
 };
 
 imgUploadForm.querySelector('.img-upload__cancel')
   .addEventListener('click', () => {
     closeUploadForm();
   });
-
 
 function onDocumentKeydown(evt) {
   if (isEsc(evt.keyCode)) {
@@ -70,7 +97,6 @@ imgUploadInput.addEventListener('change', (evt) => {
   reader.readAsDataURL(file);
   openUploadForm();
 });
-
 
 const validateHashtag = (value) => {
   errorHashtagMessageTemplate = '';
