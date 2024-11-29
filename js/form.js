@@ -1,5 +1,5 @@
 import '../vendor/pristine/pristine.min.js';
-import './create-filters.js';
+import { resetEffect } from './create-filters.js';
 import { isEsc } from './utils.js';
 import { changeImageZoom, resetImageZoom } from './change-img-zoom.js';
 
@@ -9,7 +9,7 @@ const MAX_SIMBOLS = 20;
 const imgUploadForm = document.querySelector('.img-upload__form');
 const imgUploadOverlay = imgUploadForm.querySelector('.img-upload__overlay');
 const imgUploadInput = imgUploadForm.querySelector('.img-upload__input');
-const effectsPreview = document.querySelectorAll('.effects__preview');
+const effectsPreview = imgUploadForm.querySelectorAll('.effects__preview');
 const textHashtag = imgUploadOverlay.querySelector('.text__hashtags');
 const textDescription = imgUploadOverlay.querySelector('.text__description');
 const scaleControlSmaller = imgUploadOverlay.querySelector('.scale__control--smaller');
@@ -41,6 +41,7 @@ const closeUploadForm = () => {
   textDescription.value = '';
   pristine.reset();
   resetImageZoom();
+  resetEffect();
   document.removeEventListener('keydown', onDocumentKeydown);
 };
 
