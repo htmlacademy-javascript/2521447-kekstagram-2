@@ -1,15 +1,9 @@
 import '../vendor/pristine/pristine.min.js';
 import { isEsc } from './utils.js';
-import { createFilters } from './create-filters.js';
+import { changeImageZoom, resetImageZoom } from './change-img-zoom.js';
 
 const MAX_HASHTAGS = 5;
 const MAX_SIMBOLS = 20;
-
-const Zoom = {
-  MIN: 25,
-  MAX: 100,
-  STEP: 25,
-};
 
 const imgUploadForm = document.querySelector('.img-upload__form');
 const imgUploadOverlay = imgUploadForm.querySelector('.img-upload__overlay');
@@ -17,29 +11,9 @@ const imgUploadInput = imgUploadForm.querySelector('.img-upload__input');
 const effectsPreview = document.querySelectorAll('.effects__preview');
 const textHashtag = imgUploadOverlay.querySelector('.text__hashtags');
 const textDescription = imgUploadOverlay.querySelector('.text__description');
-const scaleControlSmaller = document.querySelector('.scale__control--smaller');
-const scaleControlBigger = document.querySelector('.scale__control--bigger');
-const scaleControlValue = document.querySelector('.scale__control--value');
-const imgUploadPreview = document.querySelector('.img-upload__preview');
-const imgUpload = imgUploadPreview.querySelector('img');
+const scaleControlSmaller = imgUploadOverlay.querySelector('.scale__control--smaller');
+const scaleControlBigger = imgUploadOverlay.querySelector('.scale__control--bigger');
 
-const changeImageScale = (factor = 1) => {
-  let size = parseInt(scaleControlValue.value, 10) + (Zoom.STEP * factor);
-
-  if (size < Zoom.MIN) {
-    size = Zoom.MIN;
-  }
-
-  if (size > Zoom.MAX) {
-    size = Zoom.MAX;
-  }
-
-  scaleControlValue.value = `${size}%`;
-  imgUpload.style.transform = `scale(${size / 100})`;
-};
-
-scaleControlSmaller.addEventListener('click', () => changeImageScale(-1));
-scaleControlBigger.addEventListener('click', () => changeImageScale());
 
 let errorHashtagMessageTemplate = '';
 
@@ -53,8 +27,10 @@ const openUploadForm = () => {
   document.body.classList.add('modal-open');
   imgUploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onDocumentKeydown);
-  createFilters();
 };
+
+scaleControlSmaller.addEventListener('click', () => changeImageZoom(-1));
+scaleControlBigger.addEventListener('click', () => changeImageZoom());
 
 const closeUploadForm = () => {
   imgUploadOverlay.classList.add('hidden');
@@ -63,9 +39,8 @@ const closeUploadForm = () => {
   textHashtag.value = '';
   textDescription.value = '';
   pristine.reset();
+  resetImageZoom();
   document.removeEventListener('keydown', onDocumentKeydown);
-  imgUpload.style.transform = 'scale(1)';
-  scaleControlValue.value = '100%';
 };
 
 imgUploadForm.querySelector('.img-upload__cancel')
