@@ -1,4 +1,5 @@
 import '../vendor/pristine/pristine.min.js';
+import './create-filters.js';
 import { isEsc } from './utils.js';
 import { changeImageZoom, resetImageZoom } from './change-img-zoom.js';
 

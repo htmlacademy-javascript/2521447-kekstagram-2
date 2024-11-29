@@ -24,7 +24,7 @@ const changeImageZoom = (factor = 1) => {
 };
 
 const resetImageZoom = () => {
-  imgUpload.style.transform = 'scale(1)';
+  imgUpload.style.removeProperty('transform');
   scaleControlValue.value = '100%';
 };
 
