@@ -1,11 +1,10 @@
 import { isEsc } from './utils.js';
-import { photos } from './photos.js';
 
 const COUNT_SHOW_STEP = 5;
 let startCommentsCount = 5;
+let loadMoreComments = null;
 
 const bigPicture = document.querySelector('.big-picture');
-const pictureImgButtons = document.querySelectorAll('.picture__img');
 const commentsLoaderButton = bigPicture.querySelector('.social__comments-loader');
 const socialComments = bigPicture.querySelector('.social__comments');
 
@@ -18,10 +17,12 @@ const openBigPicture = () => {
 };
 
 const closeBigPicture = () => {
+  startCommentsCount = COUNT_SHOW_STEP;
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   document.removeEventListener('click', onDocumentClick);
+  commentsLoaderButton.removeEventListener('click', loadMoreComments);
 };
 
 bigPicture.querySelector('.big-picture__cancel')
@@ -82,26 +83,21 @@ const renderComments = (comments) => {
   socialComments.append(fragment);
 };
 
-commentsLoaderButton.addEventListener('click', (evt) => {
-  const id = Number(evt.target.closest('.big-picture').dataset.socialId);
-  const photo = photos.find((photoElement) => photoElement.id === id);
-
+const loaderComments = ({ comments }) => {
   socialComments.textContent = '';
   startCommentsCount += COUNT_SHOW_STEP;
-  renderComments(photo.comments);
-});
+  renderComments(comments);
+};
 
-const createBigPicture = ({ url, description, likes, comments, id }) => {
+const createBigPicture = ({ url, description, likes, comments }) => {
   const bigPictureImg = bigPicture.querySelector('img');
-
-  bigPicture.closest('.big-picture').dataset.socialId = id;
-
 
   bigPicture.querySelector('.likes-count').textContent = likes;
   bigPicture.querySelector('.social__comment-total-count').textContent = comments.length;
   bigPicture.querySelector('.social__caption').textContent = description;
   bigPictureImg.src = url;
   bigPictureImg.alt = description;
+
   renderComments(comments);
 };
 
@@ -110,16 +106,11 @@ const renderBigPicture = (photo) => {
   commentsLoaderButton.classList.remove('hidden');
   bigPicture.querySelector('.social__comments').textContent = '';
 
+  loadMoreComments = loaderComments.bind(null, photo);
+  commentsLoaderButton.addEventListener('click', loadMoreComments);
+
   openBigPicture();
   createBigPicture(photo);
 };
 
-pictureImgButtons.forEach((imgButton) => {
-  imgButton.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    const id = Number(evt.target.closest('.picture').dataset.thumbnailId);
-    const photo = photos.find((photoElement) => photoElement.id === id);
-
-    renderBigPicture(photo);
-  });
-});
+export { renderBigPicture };
