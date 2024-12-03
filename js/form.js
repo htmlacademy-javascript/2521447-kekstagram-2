@@ -1,7 +1,8 @@
 import '../vendor/pristine/pristine.min.js';
 import { resetEffect } from './create-filters.js';
-import { isEsc } from './utils.js';
+import { isEsc, showAlert } from './utils.js';
 import { changeImageZoom, resetImageZoom } from './change-img-zoom.js';
+import { sendData } from './api.js';
 
 const MAX_HASHTAGS = 5;
 const MAX_SIMBOLS = 20;
@@ -133,7 +134,17 @@ const validateTextDescription = (value) => value.length <= 140;
 pristine.addValidator(textDescription, validateTextDescription, 'Максимум 140 символов');
 pristine.addValidator(textHashtag, validateHashtag, () => errorHashtagMessageTemplate);
 
-imgUploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+const setImgUploadFormSubmit = (onSuccess, onError) => {
+  imgUploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      const formData = new FormData(evt.target);
+
+      sendData(formData)
+        .then(() => onSuccess('success__button', () => closeUploadForm()))
+        .catch(onError);
+    }
+  });
+};
+export { setImgUploadFormSubmit, closeUploadForm };
