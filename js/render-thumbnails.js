@@ -5,10 +5,11 @@ const containter = document.querySelector('.pictures');
 
 const createThumbnail = (photo) => {
   const thumbnail = template.cloneNode(true);
+  const image = thumbnail.querySelector('.picture__img');
+
   thumbnail.href = photo.url;
   thumbnail.dataset.id = photo.id;
 
-  const image = thumbnail.querySelector('.picture__img');
   image.src = photo.url;
   image.alt = photo.description;
 

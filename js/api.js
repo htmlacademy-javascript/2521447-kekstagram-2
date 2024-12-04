@@ -10,18 +10,24 @@ const Method = {
   POST: 'POST',
 };
 
-const ErrorMessages = {
-  [Method.GET]: 'Не удалось загрузить данные. Попробуйте обновить страницу',
-  [Method.POST]: 'Не удалось отправить данные формы',
+const ErrorMessage = {
+  GET_DATA: 'Не удалось загрузить данные. Попробуйте обновить страницу',
+  SEND_DATA: 'Не удалось отправить данные формы',
 };
 
-const load = (route, method = Method.GET, body = null) => fetch(
+const load = (route, errorMessage = null, method = Method.GET, body = null) => fetch(
   `${BASE_URL}${route}`, { method, body })
-  .then((response) =>
-    response.ok ? response.json() : Promise.reject(ErrorMessages[method])
-  );
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`Произошла ошибка ${response.status}: ${response.statusText}`);
+    }
+    return response.json();
+  })
+  .catch((err) => {
+    throw new Error(errorMessage ?? err.message);
+  });
 
-const getData = () => load(Route.GET_DATA);
-const sendData = (body) => load(Route.SEND_DATA, Method.POST, body);
+const getData = () => load(Route.GET_DATA, ErrorMessage.GET_DATA);
+const sendData = (body) => load(Route.SEND_DATA, ErrorMessage.SEND_DATA, Method.POST, body);
 
 export { getData, sendData };

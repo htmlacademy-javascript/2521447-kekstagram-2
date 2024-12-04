@@ -5,8 +5,12 @@ let startCommentsCount = 5;
 let loadMoreComments = null;
 
 const bigPicture = document.querySelector('.big-picture');
+const bigPictureImg = bigPicture.querySelector('img');
 const commentsLoaderButton = bigPicture.querySelector('.social__comments-loader');
 const socialComments = bigPicture.querySelector('.social__comments');
+const likesCount = bigPicture.querySelector('.likes-count');
+const commentsCount = bigPicture.querySelector('.social__comment-total-count');
+const socialCaption = bigPicture.querySelector('.social__caption');
 
 
 const openBigPicture = () => {
@@ -90,11 +94,9 @@ const loaderComments = ({ comments }) => {
 };
 
 const createBigPicture = ({ url, description, likes, comments }) => {
-  const bigPictureImg = bigPicture.querySelector('img');
-
-  bigPicture.querySelector('.likes-count').textContent = likes;
-  bigPicture.querySelector('.social__comment-total-count').textContent = comments.length;
-  bigPicture.querySelector('.social__caption').textContent = description;
+  likesCount.textContent = likes;
+  commentsCount.textContent = comments.length;
+  socialCaption.textContent = description;
   bigPictureImg.src = url;
   bigPictureImg.alt = description;
 
@@ -104,7 +106,7 @@ const createBigPicture = ({ url, description, likes, comments }) => {
 const renderBigPicture = (photo) => {
   startCommentsCount = COUNT_SHOW_STEP;
   commentsLoaderButton.classList.remove('hidden');
-  bigPicture.querySelector('.social__comments').textContent = '';
+  socialComments.textContent = '';
 
   loadMoreComments = loaderComments.bind(null, photo);
   commentsLoaderButton.addEventListener('click', loadMoreComments);

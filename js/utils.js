@@ -15,18 +15,8 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-const successResponse = (el, cb) => {
-  const template = document.querySelector('#success').content.querySelector('.success');
-  const success = template.cloneNode(true);
-  success.querySelector(`.${el}`)
-    .addEventListener('click', () => success.remove());
-  document.body.append(success);
-  cb();
-};
-
 export {
   isEsc,
   isEnter,
   showAlert,
-  successResponse,
 };
