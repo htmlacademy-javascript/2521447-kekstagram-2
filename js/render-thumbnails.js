@@ -1,7 +1,12 @@
 import { renderBigPicture } from './render-big-picture.js';
 
+const MAX_PHOTOS_COUNT = 19;
+
 const template = document.querySelector('#picture').content.querySelector('.picture');
 const containter = document.querySelector('.pictures');
+
+
+const comparePhotos = (a, b) => b.comments.length - a.comments.length;
 
 const createThumbnail = (photo) => {
   const thumbnail = template.cloneNode(true);
@@ -25,6 +30,14 @@ const createThumbnail = (photo) => {
   return thumbnail;
 };
 
-export const renderThumbnails = (photos) => containter.append(
-  ...photos.map(createThumbnail)
-);
+const renderThumbnails = (photos) => {
+  containter.append(
+    ...photos
+      .slice()
+      .sort(comparePhotos)
+      .slice(0, MAX_PHOTOS_COUNT)
+      .map(createThumbnail)
+  );
+};
+
+export { renderThumbnails };
