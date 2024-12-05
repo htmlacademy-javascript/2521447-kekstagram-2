@@ -1,35 +1,30 @@
-import { photos } from './photos.js';
+import { renderBigPicture } from './render-big-picture.js';
 
-const createTemplateThumbnail = ({
-  url,
-  description,
-  likes,
-  comments,
-  id,
-}) => {
-  const thumbnailTemplateElement = document.querySelector('#picture')
-    .content
-    .querySelector('.picture');
-  const thumbnailTemplate = thumbnailTemplateElement.cloneNode(true);
-  const thumbnailImg = thumbnailTemplate.querySelector('.picture__img');
+const template = document.querySelector('#picture').content.querySelector('.picture');
+const containter = document.querySelector('.pictures');
 
-  thumbnailTemplate.setAttribute('data-thumbnail-id', id);
-  thumbnailImg.src = url;
-  thumbnailImg.alt = description;
-  thumbnailTemplate.querySelector('.picture__likes').textContent = likes;
-  thumbnailTemplate.querySelector('.picture__comments').textContent = comments.length;
+const createThumbnail = (photo) => {
+  const thumbnail = template.cloneNode(true);
+  const image = thumbnail.querySelector('.picture__img');
 
-  return thumbnailTemplate;
+  thumbnail.href = photo.url;
+  thumbnail.dataset.id = photo.id;
+
+  image.src = photo.url;
+  image.alt = photo.description;
+
+  thumbnail.querySelector('.picture__comments').textContent = photo.comments.length;
+  thumbnail.querySelector('.picture__likes').textContent = photo.likes;
+
+  thumbnail.addEventListener('click', (evt) => {
+    evt.preventDefault();
+
+    renderBigPicture(photo);
+  });
+
+  return thumbnail;
 };
 
-const renderThumbnails = (listPhotos) => {
-  const pictures = document.querySelector('.pictures');
-  const fragment = document.createDocumentFragment();
-
-  listPhotos.forEach((photo) => fragment.append(createTemplateThumbnail(photo)));
-
-  pictures.append(fragment);
-};
-
-renderThumbnails(photos);
-
+export const renderThumbnails = (photos) => containter.append(
+  ...photos.map(createThumbnail)
+);
