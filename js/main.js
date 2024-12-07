@@ -1,14 +1,18 @@
 import { getData } from './api.js';
 import { renderThumbnails } from './render-thumbnails.js';
 import { setImgUploadFormSubmit } from './form.js';
-import { showAlert } from './utils.js';
-
-const MAX_PHOTOS_COUNT = 19;
+import { showAlert, showImgFilterButtons, debounce } from './utils.js';
+import { sortPhotos } from './sortPhotos.js';
 
 const app = async () => {
   try {
     const photos = await getData();
-    renderThumbnails(photos.slice(0, MAX_PHOTOS_COUNT));
+
+    renderThumbnails(photos);
+    showImgFilterButtons();
+    sortPhotos(photos, debounce(
+      (sortPhotosList) => renderThumbnails(sortPhotosList)
+    ));
   } catch (err) {
     showAlert(err.message);
   }
