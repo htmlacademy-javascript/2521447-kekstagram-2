@@ -1,16 +1,51 @@
-const imgFilters = document.querySelector('.img-filters');
-const filterDefault = imgFilters.querySelector('#filter-default');
-const filterRandom = imgFilters.querySelector('#filter-random');
-const filterDiscussed = imgFilters.querySelector('#filter-discussed');
+const RANDOM_PHOTOS_COUNT = 10;
+const ACTIVE_CLASS_NAME = 'img-filters__button--active';
 
-const showImgFilters = () => {
-  document.querySelector('.img-filters').classList.remove('img-filters--inactive');
+const Filters = {
+  default: {
+    id: 'filter-default',
+  },
+  random: {
+    id: 'filter-random',
+    toSort: (arr) => arr.toSorted(() => 0.5 - Math.random()),
+  },
+  discussed: {
+    id: 'filter-discussed',
+    toSort: (arr) => arr.toSorted((a, b) => b.comments.length - a.comments.length),
+  },
 };
 
-const sortPhotosDiscussed = (cb) => {
-  filterDiscussed.addEventListener('click', () => {
-    cb();
+const filterButtonsContainer = document.querySelector('.img-filters.container');
+const filterButtons = filterButtonsContainer.querySelectorAll('.img-filters__button');
+
+const changeActiveClassName = (buttons, evt) => {
+  buttons.forEach((button) => {
+    if (button.className.includes(ACTIVE_CLASS_NAME)) {
+      button.classList.toggle(ACTIVE_CLASS_NAME);
+      evt.target.classList.toggle(ACTIVE_CLASS_NAME);
+    }
   });
 };
 
-export { sortPhotosDiscussed, showImgFilters };
+const sortPhotos = (photos, cb) => {
+  filterButtons.forEach((filterButton) => {
+    filterButton.addEventListener('click', (evt) => {
+      changeActiveClassName(filterButtons, evt);
+
+      switch (evt.target.id) {
+        case Filters.random.id:
+          cb(Filters.random.toSort(photos).slice(0, RANDOM_PHOTOS_COUNT));
+          break;
+
+        case Filters.discussed.id:
+          cb(Filters.discussed.toSort(photos));
+          break;
+
+        default:
+          cb(photos);
+      }
+    });
+  });
+};
+
+export { sortPhotos };
