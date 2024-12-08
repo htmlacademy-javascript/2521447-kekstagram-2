@@ -69,19 +69,15 @@ function onDocumentKeydown(evt) {
   }
 }
 
-imgUploadInput.addEventListener('change', (evt) => {
-  const file = evt.target.files[0];
-  const reader = new FileReader();
+imgUploadInput.addEventListener('change', () => {
+  const file = imgUploadInput.files[0];
+  const img = document.querySelector('.img-upload__preview');
 
-  reader.addEventListener('load', (e) => {
-    const img = document.querySelector('.img-upload__preview');
-    img.querySelector('img').src = e.target.result;
-    effectsPreview.forEach((imgEffect) => {
-      imgEffect.style.backgroundImage = `url(${e.target.result})`;
-    });
+  img.querySelector('img').src = URL.createObjectURL(file);
+  effectsPreview.forEach((imgEffect) => {
+    imgEffect.style.backgroundImage = `url(${URL.createObjectURL(file)})`;
   });
 
-  reader.readAsDataURL(file);
   openUploadForm();
 });
 
