@@ -25,6 +25,13 @@ const createThumbnail = (photo) => {
   return thumbnail;
 };
 
-export const renderThumbnails = (photos) => containter.append(
-  ...photos.map(createThumbnail)
-);
+const renderThumbnails = (photos) => {
+  containter.querySelectorAll('a.picture').forEach((thumbnail) => thumbnail.remove());
+
+  containter.append(
+    ...photos
+      .map(createThumbnail)
+  );
+};
+
+export { renderThumbnails };

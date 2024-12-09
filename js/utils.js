@@ -15,8 +15,22 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
+const showImgFilterButtons = () =>
+  document.querySelector('.img-filters')
+    .classList.remove('img-filters--inactive');
+
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
 export {
   isEsc,
   isEnter,
   showAlert,
+  showImgFilterButtons,
+  debounce
 };
