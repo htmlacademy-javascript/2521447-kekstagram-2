@@ -57,14 +57,14 @@ const closeUploadForm = (isSaveData = true) => {
 
 imgUploadForm.querySelector('.img-upload__cancel')
   .addEventListener('click', () => {
-    closeUploadForm();
+    closeUploadForm(false);
   });
 
 function onDocumentKeydown(evt) {
   if (isEsc(evt.keyCode)) {
     if (document.activeElement !== textHashtag && document.activeElement !== textDescription) {
       evt.preventDefault();
-      closeUploadForm();
+      closeUploadForm(false);
     }
   }
 }
@@ -155,8 +155,10 @@ const closePopup = (popup, button, evt) => {
   evt.preventDefault();
   evt.stopPropagation();
 
-  if (button || isEsc(evt.keyCode) || evt.target === popup) {
+  if (evt.target === button || isEsc(evt.keyCode) || evt.target === popup) {
     popup.remove();
+
+    document.addEventListener('keydown', onDocumentKeydown);
     button.removeEventListener('click', closerPopup);
     document.removeEventListener('click', closerPopup);
     document.removeEventListener('keydown', closerPopup);
@@ -170,10 +172,11 @@ const showSubmitPopup = (el) => {
 
   closerPopup = closePopup.bind(this, popup, button);
 
+  document.body.append(popup);
+
   button.addEventListener('click', closerPopup);
   document.addEventListener('click', closerPopup);
   document.addEventListener('keydown', closerPopup);
-  document.body.append(popup);
 };
 
 const setImgUploadFormSubmit = (onSubmit) => {
@@ -193,7 +196,7 @@ const setImgUploadFormSubmit = (onSubmit) => {
           showSubmitPopup(successType);
         }))
         .catch(() => onSubmit(() => {
-          closeUploadForm(true);
+          document.removeEventListener('keydown', onDocumentKeydown);
           showSubmitPopup(errorType);
         }))
         .finally(unblockSubmitButton);
