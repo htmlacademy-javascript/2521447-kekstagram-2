@@ -2,7 +2,7 @@ import { getData } from './api.js';
 import { renderThumbnails } from './render-thumbnails.js';
 import { setImgUploadFormSubmit } from './form.js';
 import { showAlert, showImgFilterButtons, debounce } from './utils.js';
-import { sortPhotos } from './sortPhotos.js';
+import { sortPhotos } from './sort-photos.js';
 
 const app = async () => {
   try {
