@@ -1,31 +1,39 @@
-const imgZoom = {
+const RADIX = 10;
+const NOTATION_TRANSFORM_SCALE = 0.01;
+
+
+const imageZoom = {
   MIN: 25,
   MAX: 100,
   STEP: 25,
 };
 
+
 const scaleControlValue = document.querySelector('.scale__control--value');
-const imgUpload = document.querySelector('.img-upload__preview')
+const imageUpload = document.querySelector('.img-upload__preview')
   .querySelector('img');
 
-const changeImageZoom = (factor = 1) => {
-  let size = parseInt(scaleControlValue.value, 10) + (imgZoom.STEP * factor);
 
-  if (size < imgZoom.MIN) {
-    size = imgZoom.MIN;
+const changeImageZoom = (factor = 1) => {
+  let size = parseInt(scaleControlValue.value, RADIX) + (imageZoom.STEP * factor);
+
+  if (size < imageZoom.MIN) {
+    size = imageZoom.MIN;
   }
 
-  if (size > imgZoom.MAX) {
-    size = imgZoom.MAX;
+  if (size > imageZoom.MAX) {
+    size = imageZoom.MAX;
   }
 
   scaleControlValue.value = `${size}%`;
-  imgUpload.style.transform = `scale(${size / 100})`;
+  imageUpload.style.transform = `scale(${size * NOTATION_TRANSFORM_SCALE})`;
 };
 
+
 const resetImageZoom = () => {
-  imgUpload.style.removeProperty('transform');
-  scaleControlValue.value = '100%';
+  imageUpload.style.removeProperty('transform');
+  scaleControlValue.value = `${imageZoom.MAX}%`;
 };
+
 
 export { changeImageZoom, resetImageZoom };

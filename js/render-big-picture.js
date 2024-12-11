@@ -1,8 +1,12 @@
 import { isEsc } from './utils.js';
 
+
 const COUNT_SHOW_STEP = 5;
+
+
 let startCommentsCount = 5;
 let loadMoreComments = null;
+
 
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImg = bigPicture.querySelector('img');
@@ -20,6 +24,7 @@ const openBigPicture = () => {
   document.addEventListener('click', onDocumentClick);
 };
 
+
 const closeBigPicture = () => {
   startCommentsCount = COUNT_SHOW_STEP;
   bigPicture.classList.add('hidden');
@@ -29,10 +34,12 @@ const closeBigPicture = () => {
   commentsLoaderButton.removeEventListener('click', loadMoreComments);
 };
 
+
 bigPicture.querySelector('.big-picture__cancel')
   .addEventListener('click', () => {
     closeBigPicture();
   });
+
 
 function onDocumentKeydown(evt) {
   if (isEsc(evt.keyCode)) {
@@ -40,13 +47,16 @@ function onDocumentKeydown(evt) {
     closeBigPicture();
   }
 }
+
+
 function onDocumentClick(evt) {
   if (evt.target.className === 'big-picture overlay') {
     closeBigPicture();
   }
 }
 
-const createTemplateComment = ({ id, avatar, message, name }) => {
+
+const getTemplateComment = ({ id, avatar, message, name }) => {
   const templateCommentElement = document.querySelector('#social__comment')
     .content
     .querySelector('.social__comment');
@@ -60,12 +70,13 @@ const createTemplateComment = ({ id, avatar, message, name }) => {
   return templateComment;
 };
 
+
 const renderComments = (comments) => {
   const fragment = document.createDocumentFragment();
   const socialCommentShownCount = bigPicture.querySelector('.social__comment-shown-count');
 
   if (comments.length <= startCommentsCount) {
-    comments.forEach((comment) => fragment.append(createTemplateComment(comment)));
+    comments.forEach((comment) => fragment.append(getTemplateComment(comment)));
     socialCommentShownCount.textContent = comments.length;
     commentsLoaderButton.classList.add('hidden');
   } else {
@@ -74,7 +85,7 @@ const renderComments = (comments) => {
     for (let i = 0; i < startCommentsCount; i++) {
 
       if (i < comments.length) {
-        fragment.append(createTemplateComment(comments[i]));
+        fragment.append(getTemplateComment(comments[i]));
       }
 
       if (comments.length <= startCommentsCount) {
@@ -87,11 +98,13 @@ const renderComments = (comments) => {
   socialComments.append(fragment);
 };
 
+
 const loaderComments = ({ comments }) => {
   socialComments.textContent = '';
   startCommentsCount += COUNT_SHOW_STEP;
   renderComments(comments);
 };
+
 
 const createBigPicture = ({ url, description, likes, comments }) => {
   likesCount.textContent = likes;
@@ -102,6 +115,7 @@ const createBigPicture = ({ url, description, likes, comments }) => {
 
   renderComments(comments);
 };
+
 
 const renderBigPicture = (photo) => {
   startCommentsCount = COUNT_SHOW_STEP;
@@ -114,5 +128,6 @@ const renderBigPicture = (photo) => {
   openBigPicture();
   createBigPicture(photo);
 };
+
 
 export { renderBigPicture };

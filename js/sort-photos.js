@@ -1,22 +1,25 @@
 const RANDOM_PHOTOS_COUNT = 10;
 const ACTIVE_CLASS_NAME = 'img-filters__button--active';
 
+
 const Filters = {
   default: {
     id: 'filter-default',
   },
   random: {
     id: 'filter-random',
-    toSort: (arr) => arr.toSorted(() => 0.5 - Math.random()),
+    toSorted: (photos) => photos.toSorted(() => 0.5 - Math.random()),
   },
   discussed: {
     id: 'filter-discussed',
-    toSort: (arr) => arr.toSorted((a, b) => b.comments.length - a.comments.length),
+    toSorted: (photos) => photos.toSorted((a, b) => b.comments.length - a.comments.length),
   },
 };
 
+
 const filterButtonsContainer = document.querySelector('.img-filters.container');
 const filterButtons = filterButtonsContainer.querySelectorAll('.img-filters__button');
+
 
 const changeActiveClassName = (buttons, evt) => {
   buttons.forEach((button) => {
@@ -27,6 +30,7 @@ const changeActiveClassName = (buttons, evt) => {
   });
 };
 
+
 const sortPhotos = (photos, cb) => {
   filterButtons.forEach((filterButton) => {
     filterButton.addEventListener('click', (evt) => {
@@ -34,11 +38,11 @@ const sortPhotos = (photos, cb) => {
 
       switch (evt.target.id) {
         case Filters.random.id:
-          cb(Filters.random.toSort(photos).slice(0, RANDOM_PHOTOS_COUNT));
+          cb(Filters.random.toSorted(photos).slice(0, RANDOM_PHOTOS_COUNT));
           break;
 
         case Filters.discussed.id:
-          cb(Filters.discussed.toSort(photos));
+          cb(Filters.discussed.toSorted(photos));
           break;
 
         default:
@@ -47,5 +51,6 @@ const sortPhotos = (photos, cb) => {
     });
   });
 };
+
 
 export { sortPhotos };

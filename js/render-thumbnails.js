@@ -1,9 +1,12 @@
 import { renderBigPicture } from './render-big-picture.js';
 
+
 const template = document.querySelector('#picture').content.querySelector('.picture');
 const containter = document.querySelector('.pictures');
+const fragment = document.createDocumentFragment();
 
-const createThumbnail = (photo) => {
+
+const getThumbnail = (photo) => {
   const thumbnail = template.cloneNode(true);
   const image = thumbnail.querySelector('.picture__img');
 
@@ -25,13 +28,20 @@ const createThumbnail = (photo) => {
   return thumbnail;
 };
 
-const renderThumbnails = (photos) => {
-  containter.querySelectorAll('a.picture').forEach((thumbnail) => thumbnail.remove());
 
-  containter.append(
-    ...photos
-      .map(createThumbnail)
-  );
+const renderThumbnails = (photos) => {
+  containter.querySelectorAll('a.picture')
+    .forEach((thumbnail) => thumbnail.remove());
+
+  photos
+    .forEach((photo) => fragment
+      .append(
+        getThumbnail(photo)
+      )
+    );
+
+  containter.append(fragment);
 };
+
 
 export { renderThumbnails };
