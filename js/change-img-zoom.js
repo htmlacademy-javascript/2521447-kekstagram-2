@@ -9,9 +9,11 @@ const imageZoom = {
 };
 
 
-const scaleControlValue = document.querySelector('.scale__control--value');
-const imageUpload = document.querySelector('.img-upload__preview')
-  .querySelector('img');
+const imgUploadOverlay = document.querySelector('.img-upload__overlay');
+const scaleControlValue = imgUploadOverlay.querySelector('.scale__control--value');
+const imageUpload = imgUploadOverlay.querySelector('img');
+const scaleControlSmaller = imgUploadOverlay.querySelector('.scale__control--smaller');
+const scaleControlBigger = imgUploadOverlay.querySelector('.scale__control--bigger');
 
 
 const changeImageZoom = (factor = 1) => {
@@ -30,10 +32,14 @@ const changeImageZoom = (factor = 1) => {
 };
 
 
+scaleControlSmaller.addEventListener('click', () => changeImageZoom(-1));
+scaleControlBigger.addEventListener('click', () => changeImageZoom());
+
+
 const resetImageZoom = () => {
   imageUpload.style.removeProperty('transform');
   scaleControlValue.value = `${imageZoom.MAX}%`;
 };
 
 
-export { changeImageZoom, resetImageZoom };
+export { resetImageZoom };
