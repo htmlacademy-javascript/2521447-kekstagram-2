@@ -1,4 +1,5 @@
-import { renderBigPicture } from './render-big-picture.js';
+// import { renderBigPicture } from './render-big-picture.js';
+import { openBigPicture } from './open-big-picture.js';
 
 
 const template = document.querySelector('#picture').content.querySelector('.picture');
@@ -22,7 +23,7 @@ const getThumbnail = (photo) => {
   thumbnail.addEventListener('click', (evt) => {
     evt.preventDefault();
 
-    renderBigPicture(photo);
+    openBigPicture(photo);
   });
 
   return thumbnail;
