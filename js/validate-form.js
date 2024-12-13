@@ -6,8 +6,10 @@ const MAX_SIMBOLS = 20;
 
 
 const imgUploadForm = document.querySelector('.img-upload__form');
-const textDescription = imgUploadForm.querySelector('.text__description');
+const imgUploadInput = imgUploadForm.querySelector('.img-upload__input');
 const textHashtag = imgUploadForm.querySelector('.text__hashtags');
+const textDescription = imgUploadForm.querySelector('.text__description');
+const button = imgUploadForm.querySelector('.img-upload__submit');
 
 
 let errorHashtagMessageTemplate = '';
@@ -75,18 +77,28 @@ const validateHashtag = (value) => {
 const validateTextDescription = (value) => value.length <= 140;
 
 
-pristine.addValidator(textDescription, validateTextDescription, 'Максимум 140 символов');
 pristine.addValidator(textHashtag, validateHashtag, () => errorHashtagMessageTemplate);
+pristine.addValidator(textDescription, validateTextDescription, 'Максимум 140 символов');
 
 
-const resetForm = () => {
+const isButtonDisabled = () => {
+  button.disabled = !pristine.validate();
+};
+
+
+textHashtag.addEventListener('input', isButtonDisabled);
+textDescription.addEventListener('input', isButtonDisabled);
+
+
+const validateForm = () => pristine.validate();
+
+
+const resetValidateForm = () => {
+  imgUploadInput.value = '';
   textHashtag.value = '';
   textDescription.value = '';
   pristine.reset();
 };
 
 
-const validateForm = () => pristine.validate();
-
-
-export { validateForm, resetForm };
+export { validateForm, resetValidateForm };

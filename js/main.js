@@ -1,8 +1,8 @@
-import { getData } from './api.js';
+import { getData } from './data.js';
 import { renderThumbnails } from './render-thumbnails.js';
-import { setImgUploadFormSubmit } from './form.js';
 import { showAlert, showImgFilterButtons, debounce } from './utils.js';
 import { sortPhotos } from './sort-photos.js';
+import { sendFormData } from './send-form-data.js';
 
 
 const app = async () => {
@@ -22,6 +22,4 @@ const app = async () => {
 
 
 app();
-
-
-setImgUploadFormSubmit((cb) => cb());
+sendFormData();

@@ -1,5 +1,5 @@
 import { renderComments, clearComments } from './render-comments.js';
-import { isEsc } from './utils.js';
+import { isEsc, toggleModalElement } from './utils.js';
 
 
 const bigPicture = document.querySelector('.big-picture');
@@ -22,9 +22,7 @@ const editBigPicture = (photo) => {
 const openBigPicture = (photo) => {
   document.addEventListener('keydown', onDocumentKeydown);
 
-  bigPicture.classList.remove('hidden');
-  document.body.classList.add('modal-open');
-
+  toggleModalElement(bigPicture);
   clearComments();
   editBigPicture(photo);
   renderComments(photo.comments);
@@ -34,8 +32,7 @@ const openBigPicture = (photo) => {
 const closeBigPicture = () => {
   document.removeEventListener('keydown', onDocumentKeydown);
 
-  bigPicture.classList.add('hidden');
-  document.body.classList.remove('modal-open');
+  toggleModalElement(bigPicture);
 };
 
 

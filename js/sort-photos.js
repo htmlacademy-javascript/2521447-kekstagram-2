@@ -2,7 +2,7 @@ const RANDOM_PHOTOS_COUNT = 10;
 const ACTIVE_CLASS_NAME = 'img-filters__button--active';
 
 
-const Filters = {
+const filters = {
   default: {
     id: 'filter-default',
   },
@@ -37,12 +37,12 @@ const sortPhotos = (photos, cb) => {
       changeActiveClassName(filterButtons, evt);
 
       switch (evt.target.id) {
-        case Filters.random.id:
-          cb(Filters.random.toSorted(photos).slice(0, RANDOM_PHOTOS_COUNT));
+        case filters.random.id:
+          cb(filters.random.toSorted(photos).slice(0, RANDOM_PHOTOS_COUNT));
           break;
 
-        case Filters.discussed.id:
-          cb(Filters.discussed.toSorted(photos));
+        case filters.discussed.id:
+          cb(filters.discussed.toSorted(photos));
           break;
 
         default:

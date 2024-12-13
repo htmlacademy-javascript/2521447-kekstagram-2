@@ -32,10 +32,17 @@ const debounce = (callback, timeoutDelay = 500) => {
 };
 
 
+const toggleModalElement = (modalElement) => {
+  modalElement.classList.toggle('hidden');
+  document.body.classList.toggle('modal-open');
+};
+
+
 export {
   isEsc,
   isEnter,
   showAlert,
   showImgFilterButtons,
   debounce,
+  toggleModalElement,
 };
