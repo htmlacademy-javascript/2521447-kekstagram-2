@@ -1,12 +1,13 @@
 const DEFAULT_OPTIONS_SLIDER = {
   range: {
     'min': 0,
-    'max': 1
+    'max': 1,
   },
   start: 1,
   step: 0.1,
   connect: 'lower',
 };
+
 
 const uploadForm = document.querySelector('.img-upload__form');
 const effectsList = uploadForm.querySelector('.effects__list');
@@ -16,7 +17,8 @@ const effectLevelValue = uploadForm.querySelector('.effect-level__value');
 const sliderElement = uploadForm.querySelector('.effect-level__slider');
 const image = imgPreview.querySelector('img');
 
-const SliderEffects = {
+
+const sliderEffects = {
   none: {
     options: {
       ...DEFAULT_OPTIONS_SLIDER,
@@ -93,21 +95,32 @@ const SliderEffects = {
   },
 };
 
-SliderEffects.none.effect();
 
-noUiSlider.create(sliderElement, DEFAULT_OPTIONS_SLIDER);
+const createFilters = () => {
+  sliderEffects.none.effect();
+  noUiSlider.create(sliderElement, DEFAULT_OPTIONS_SLIDER);
+};
+
 
 const updateOptions = (effect) => {
-  sliderElement.noUiSlider.updateOptions(SliderEffects[effect].options);
+  sliderElement.noUiSlider.updateOptions(sliderEffects[effect].options);
 };
+
 
 const changeEffectLevel = (effect) => {
   sliderElement.noUiSlider.on('slide', (value) => {
-    image.style.filter = SliderEffects[effect].effect(value);
+    image.style.filter = sliderEffects[effect].effect(value);
   });
 };
 
-effectsList.addEventListener('click', (evt) => {
+
+const applyFilterToImage = (effect) => {
+  const startPointFilter = sliderEffects[effect].options.range.max;
+  image.style.filter = sliderEffects[effect].effect(startPointFilter);
+};
+
+
+effectsList.addEventListener('change', (evt) => {
   evt.preventDefault();
 
   const target = evt.target.closest('.effects__item').querySelector('input');
@@ -116,16 +129,19 @@ effectsList.addEventListener('click', (evt) => {
   target.checked = true;
 
   updateOptions(effect);
-  image.style.filter = SliderEffects[effect].effect(SliderEffects[effect].options.range.max);
+  applyFilterToImage(effect);
   changeEffectLevel(effect);
 });
 
+
 const resetEffect = () => {
-  image.style.removeProperty('filter');
   effectLevelValue.value = '';
+  image.style.removeProperty('filter');
+
   sliderElement.noUiSlider.updateOptions(DEFAULT_OPTIONS_SLIDER);
   effectsList.querySelector('#effect-none').checked = true;
-  SliderEffects.none.effect();
+  sliderEffects.none.effect();
 };
 
-export { resetEffect };
+
+export { createFilters, resetEffect };

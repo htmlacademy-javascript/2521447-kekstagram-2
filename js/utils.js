@@ -1,7 +1,9 @@
 const ALERT_SHOW_TIME = 5000;
 
+
 const isEsc = (key) => key === 27;
 const isEnter = (key) => key === 13;
+
 
 const showAlert = (message) => {
   const template = document.querySelector('#data-error').content.querySelector('.data-error');
@@ -15,9 +17,11 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
+
 const showImgFilterButtons = () =>
   document.querySelector('.img-filters')
     .classList.remove('img-filters--inactive');
+
 
 const debounce = (callback, timeoutDelay = 500) => {
   let timeoutId;
@@ -27,10 +31,18 @@ const debounce = (callback, timeoutDelay = 500) => {
   };
 };
 
+
+const toggleModalElement = (modalElement) => {
+  modalElement.classList.toggle('hidden');
+  document.body.classList.toggle('modal-open');
+};
+
+
 export {
   isEsc,
   isEnter,
   showAlert,
   showImgFilterButtons,
-  debounce
+  debounce,
+  toggleModalElement,
 };
