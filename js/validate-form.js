@@ -6,6 +6,7 @@ const MAX_SIMBOLS = 20;
 
 
 const imgUploadForm = document.querySelector('.img-upload__form');
+const imgUploadInput = imgUploadForm.querySelector('.img-upload__input');
 const textHashtag = imgUploadForm.querySelector('.text__hashtags');
 const textDescription = imgUploadForm.querySelector('.text__description');
 const button = imgUploadForm.querySelector('.img-upload__submit');
@@ -93,11 +94,12 @@ textDescription.addEventListener('input', isButtonDisabled);
 const validateForm = () => pristine.validate();
 
 
-const resetForm = () => {
+const resetValidateForm = () => {
+  imgUploadInput.value = '';
   textHashtag.value = '';
   textDescription.value = '';
   pristine.reset();
 };
 
 
-export { validateForm, resetForm };
+export { validateForm, resetValidateForm };
