@@ -2,6 +2,7 @@ import { getData } from './data.js';
 import { renderThumbnails } from './render-thumbnails.js';
 import { showAlert, showImgFilterButtons, debounce } from './utils.js';
 import { sortPhotos } from './sort-photos.js';
+import { createFilters } from './create-filters.js';
 import { sendFormData } from './send-form-data.js';
 
 
@@ -22,4 +23,5 @@ const app = async () => {
 
 
 app();
+createFilters();
 sendFormData();
