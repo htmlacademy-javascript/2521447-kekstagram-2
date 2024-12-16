@@ -20,6 +20,18 @@ const successTemplate = document.querySelector('#success').content;
 const errorTemplate = document.querySelector('#error').content;
 
 
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
+
 const openUploadForm = () => {
   toggleModalElement(imgUploadOverlay);
 
@@ -32,6 +44,7 @@ const closeUploadForm = () => {
 
   document.removeEventListener('keydown', onDocumentKeydown);
 
+  unblockSubmitButton();
   resetValidateForm();
   resetImageZoom();
   resetEffect();
@@ -69,18 +82,6 @@ imgUploadInput.addEventListener('change', () => {
 
   openUploadForm();
 });
-
-
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
-  submitButton.textContent = SubmitButtonText.SENDING;
-};
-
-
-const unblockSubmitButton = () => {
-  submitButton.disabled = false;
-  submitButton.textContent = SubmitButtonText.IDLE;
-};
 
 
 const closeNotification = (evt) => {

@@ -1,4 +1,3 @@
-// import { renderBigPicture } from './render-big-picture.js';
 import { openBigPicture } from './open-big-picture.js';
 
 
