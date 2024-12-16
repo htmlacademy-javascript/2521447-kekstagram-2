@@ -2,7 +2,7 @@ import { isEsc, toggleModalElement } from './utils.js';
 import { validateForm, resetValidateForm } from './validate-form.js';
 import { resetImageZoom } from './change-image-zoom.js';
 import { resetEffect } from './create-filters.js';
-import { sendData } from './data.js';
+import { sendData } from './api.js';
 
 
 const SubmitButtonText = {
