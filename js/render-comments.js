@@ -59,7 +59,7 @@ const renderComments = (data) => {
 };
 
 
-const loadMoreComments = () => {
+const onLoaderButtonClick = () => {
   socialComments.textContent = '';
   startCommentsCount += COUNT_SHOW_STEP;
 
@@ -74,7 +74,7 @@ const clearComments = () => {
 };
 
 
-commentsLoaderButton.addEventListener('click', loadMoreComments);
+commentsLoaderButton.addEventListener('click', onLoaderButtonClick);
 
 
 export { renderComments, clearComments };

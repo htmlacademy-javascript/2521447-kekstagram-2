@@ -45,7 +45,12 @@ function onDocumentKeydown(evt) {
 }
 
 
-bigPictureCloseButton.addEventListener('click', closeBigPicture);
+const onCloseButtonClick = () => {
+  closeBigPicture();
+};
+
+
+bigPictureCloseButton.addEventListener('click', onCloseButtonClick);
 
 
 export { openBigPicture };

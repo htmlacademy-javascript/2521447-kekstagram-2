@@ -81,13 +81,13 @@ pristine.addValidator(textHashtag, validateHashtag, () => errorHashtagMessageTem
 pristine.addValidator(textDescription, validateTextDescription, 'Максимум 140 символов');
 
 
-const isButtonDisabled = () => {
+const onTextHashtagInput = () => {
   button.disabled = !pristine.validate();
 };
 
 
-textHashtag.addEventListener('input', isButtonDisabled);
-textDescription.addEventListener('input', isButtonDisabled);
+textHashtag.addEventListener('input', onTextHashtagInput);
+textDescription.addEventListener('input', onTextHashtagInput);
 
 
 const validateForm = () => pristine.validate();

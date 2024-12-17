@@ -2,7 +2,7 @@ const RADIX = 10;
 const NOTATION_TRANSFORM_SCALE = 0.01;
 
 
-const imageZoom = {
+const ImageZoom = {
   MIN: 25,
   MAX: 100,
   STEP: 25,
@@ -17,14 +17,14 @@ const scaleControlBigger = imgUploadOverlay.querySelector('.scale__control--bigg
 
 
 const changeImageZoom = (factor = 1) => {
-  let size = parseInt(scaleControlValue.value, RADIX) + (imageZoom.STEP * factor);
+  let size = parseInt(scaleControlValue.value, RADIX) + (ImageZoom.STEP * factor);
 
-  if (size < imageZoom.MIN) {
-    size = imageZoom.MIN;
+  if (size < ImageZoom.MIN) {
+    size = ImageZoom.MIN;
   }
 
-  if (size > imageZoom.MAX) {
-    size = imageZoom.MAX;
+  if (size > ImageZoom.MAX) {
+    size = ImageZoom.MAX;
   }
 
   scaleControlValue.value = `${size}%`;
@@ -38,7 +38,7 @@ scaleControlBigger.addEventListener('click', () => changeImageZoom());
 
 const resetImageZoom = () => {
   imageUpload.style.removeProperty('transform');
-  scaleControlValue.value = `${imageZoom.MAX}%`;
+  scaleControlValue.value = `${ImageZoom.MAX}%`;
 };
 
 
