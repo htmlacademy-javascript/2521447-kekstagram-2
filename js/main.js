@@ -6,7 +6,7 @@ import { createFilters } from './create-filters.js';
 import { sendFormData } from './send-form-data.js';
 
 
-const app = async () => {
+const initApplication = async () => {
   try {
     const photos = await getData();
 
@@ -22,6 +22,6 @@ const app = async () => {
 };
 
 
-app();
+initApplication();
 createFilters();
 sendFormData();

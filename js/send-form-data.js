@@ -92,10 +92,20 @@ const closeNotification = (evt) => {
 
   if (evt.target === existElement || evt.target === closeButton || isEsc(evt.keyCode)) {
     existElement.remove();
-    document.body.removeEventListener('click', closeNotification);
-    document.body.removeEventListener('keydown', closeNotification);
+    document.body.removeEventListener('click', onDocumentNotificationClick);
+    document.body.removeEventListener('keydown', onDocumentNotificationKeydown);
   }
 };
+
+
+function onDocumentNotificationClick(evt) {
+  closeNotification(evt);
+}
+
+
+function onDocumentNotificationKeydown(evt) {
+  closeNotification(evt);
+}
 
 
 const appendNotification = (template, cb = null) => {
@@ -104,8 +114,8 @@ const appendNotification = (template, cb = null) => {
   const notificationNode = template.cloneNode(true);
 
   document.body.append(notificationNode);
-  document.body.addEventListener('click', closeNotification);
-  document.body.addEventListener('keydown', closeNotification);
+  document.body.addEventListener('click', onDocumentNotificationClick);
+  document.body.addEventListener('keydown', onDocumentNotificationKeydown);
 };
 
 
